@@ -1,5 +1,7 @@
-package com.sba.sms.dao;
+package sba.sms.dao;
 
+
+import sba.sms.models.Student;
 
 import java.util.List;
 

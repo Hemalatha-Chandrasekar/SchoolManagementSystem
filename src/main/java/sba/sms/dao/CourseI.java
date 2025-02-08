@@ -1,6 +1,8 @@
-package com.sba.sms.dao;
+package sba.sms.dao;
 
-import Course;
+
+import sba.sms.models.Course;
+
 import java.util.List;
 
 public interface CourseI {

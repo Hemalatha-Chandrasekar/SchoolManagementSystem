@@ -1,15 +1,15 @@
-package com.sba.sms;
+package sba.sms;
 
-import com.sba.sms.util.CommandLine;
-import Course;
-import Student;
-import com.sba.sms.service.CourseService;
-import com.sba.sms.service.StudentService;
+import sba.sms.models.Course;
+import sba.sms.models.Student;
+import sba.sms.service.CourseService;
+import sba.sms.service.StudentService;
+import sba.sms.util.CommandLine;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class Main{
+public class Main {
 
     public static void main(String[] args) {
         CommandLine.addData(); // Add initial data
@@ -81,7 +81,7 @@ public class Main{
                             int courseId = scanner.nextInt();
                             scanner.nextLine(); // Consume newline
 
-                            courseService.registerStudentToCourse(email, courseId);
+                            studentService.registerStudentToCourse(email, courseId); // Corrected line!
                             System.out.println("successfully register " + student.getName() + " to " + courseService.getCourseById(courseId).getName());
 
                             System.out.println(email + " courses:");

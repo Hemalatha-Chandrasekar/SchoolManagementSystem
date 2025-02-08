@@ -1,13 +1,14 @@
-package com.sba.sms.service;
+package sba.sms.service;
 
-import com.sba.sms.dao.CourseDAO;
-import com.sba.sms.dao.CourseI;
-import Course;
+import sba.sms.dao.CoureseDAO;
+import sba.sms.dao.CourseI;
+import sba.sms.models.Course;
+
 
 import java.util.List;
 
 public class CourseService {
-    private CourseI courseDAO = new CourseDAO();
+    private CourseI courseDAO = new CoureseDAO();
 
     public Course getCourseById(Integer id) {
         return courseDAO.getCourseById(id);

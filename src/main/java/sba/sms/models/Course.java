@@ -1,4 +1,4 @@
-package com.sba.sms.models;
+package sba.sms.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,10 @@
-package com.sba.sms.dao;
+package sba.sms.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import com.sba.sms.util.HibernateUtil;
-import com.sba.sms.models.Student;
+import sba.sms.models.Student;
+import sba.sms.util.HibernateUtil;
+
 
 
 import java.util.List;

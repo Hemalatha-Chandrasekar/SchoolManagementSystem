@@ -1,4 +1,4 @@
-package com.sba.sms.util;
+package sba.sms.util;
 
 import lombok.Getter;
 import org.hibernate.SessionFactory;
