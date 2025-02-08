@@ -2,6 +2,7 @@ package sba.sms.models;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -37,5 +38,26 @@ public class Student {
         this.email = email;
         this.name = name;
         this.password = password;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(email, student.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
