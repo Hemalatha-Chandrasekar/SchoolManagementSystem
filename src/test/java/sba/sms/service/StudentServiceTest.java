@@ -55,7 +55,7 @@ class StudentServiceTest {
         // 1. ARRANGE
         String email = "nonexistent@example.com";
 
-        // Tell our fake database helper it won't find anyone
+
         when(studentDAO.getStudentByEmail(email)).thenReturn(null);
 
         // 2. ACT
@@ -75,7 +75,6 @@ class StudentServiceTest {
         studentService.createStudent(studentToCreate);
 
         // 3. ASSERT
-        // Make sure our fake database helper's "create" method was called ONCE
         verify(studentDAO, times(1)).create(studentToCreate);
     }
 
@@ -111,7 +110,5 @@ class StudentServiceTest {
         assertTrue(actualStudents.isEmpty()); // Check if the list is empty
     }
 
-    // Let's skip the course registration tests for now, to keep it simpler.
-    // Those tests involve more complex mocking.
 
 }
