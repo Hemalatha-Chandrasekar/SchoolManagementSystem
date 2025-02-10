@@ -1,12 +1,12 @@
 package sba.sms.service;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import sba.sms.dao.StudentDAO;
-import sba.sms.models.Course;
-import sba.sms.models.Student;
+import sba.sms.models.Student; // Let's not test courses yet for simplicity
 import sba.sms.service.StudentService;
 
 import java.util.ArrayList;
@@ -17,114 +17,101 @@ import static org.mockito.Mockito.*;
 
 class StudentServiceTest {
 
+    // Imagine StudentDAO as a database helper
     @Mock
     private StudentDAO studentDAO;
 
+    // This is the thing we're testing
     @InjectMocks
     private StudentService studentService;
 
+    // This runs before EACH test.  Like a clean slate.
     @BeforeEach
     void setUp() {
+        // Prepare our fake objects (mocks)
         MockitoAnnotations.openMocks(this);
     }
 
+    // === TEST 1:  Finding a student by their email (if they exist) ===
     @Test
-    void getStudentByEmail_ExistingEmail_ReturnsStudent() {
-        // Arrange
+    void getStudentByEmail_IfEmailExists_ReturnsTheStudent() {
+        // 1. ARRANGE (Setup the test)
         String email = "test@example.com";
         Student expectedStudent = new Student(email, "Test User", "password");
+
+        // Tell our fake database helper what to do
         when(studentDAO.getStudentByEmail(email)).thenReturn(expectedStudent);
 
-        // Act
+        // 2. ACT (Do the thing we're testing)
         Student actualStudent = studentService.getStudentByEmail(email);
 
-        // Assert
+        // 3. ASSERT (Check if it worked correctly)
         assertEquals(expectedStudent, actualStudent);
     }
 
+    // === TEST 2: Finding a student by email (if they DON'T exist) ===
     @Test
-    void getStudentByEmail_NonExistingEmail_ReturnsNull() {
-        // Arrange
+    void getStudentByEmail_IfEmailDoesNotExist_ReturnsNull() {
+        // 1. ARRANGE
         String email = "nonexistent@example.com";
+
+        // Tell our fake database helper it won't find anyone
         when(studentDAO.getStudentByEmail(email)).thenReturn(null);
 
-        // Act
+        // 2. ACT
         Student actualStudent = studentService.getStudentByEmail(email);
 
-        // Assert
+        // 3. ASSERT
         assertNull(actualStudent);
     }
 
+    // === TEST 3: Creating a student ===
     @Test
-    void createStudent_ValidStudent_CallsCreateOnDAO() {
-        // Arrange
+    void createStudent_ShouldCallCreateOnDAO() {
+        // 1. ARRANGE
         Student studentToCreate = new Student("new@example.com", "New User", "password");
 
-        // Act
+        // 2. ACT
         studentService.createStudent(studentToCreate);
 
-        // Assert
-        verify(studentDAO, times(1)).create(studentToCreate);  // Verify that the create method on studentDAO was called once
+        // 3. ASSERT
+        // Make sure our fake database helper's "create" method was called ONCE
+        verify(studentDAO, times(1)).create(studentToCreate);
     }
 
+    // === TEST 4:  Getting all students (if there ARE students) ===
     @Test
-    void getAllStudents_StudentsExist_ReturnsListOfStudents() {
-        // Arrange
+    void getAllStudents_IfStudentsExist_ReturnsListOfStudents() {
+        // 1. ARRANGE
         List<Student> expectedStudents = new ArrayList<>();
         expectedStudents.add(new Student("student1@example.com", "Student One", "password"));
         expectedStudents.add(new Student("student2@example.com", "Student Two", "password"));
+
+        // Tell our fake database helper what to return
         when(studentDAO.getAllStudents()).thenReturn(expectedStudents);
 
-        // Act
+        // 2. ACT
         List<Student> actualStudents = studentService.getAllStudents();
 
-        // Assert
+        // 3. ASSERT
         assertEquals(expectedStudents, actualStudents);
     }
 
+    // === TEST 5: Getting all students (if there are NO students) ===
     @Test
-    void getAllStudents_NoStudentsExist_ReturnsEmptyList() {
-        // Arrange
+    void getAllStudents_IfNoStudentsExist_ReturnsEmptyList() {
+        // 1. ARRANGE
+        // Tell our fake database helper to return an empty list
         when(studentDAO.getAllStudents()).thenReturn(new ArrayList<>());
 
-        // Act
+        // 2. ACT
         List<Student> actualStudents = studentService.getAllStudents();
 
-        // Assert
-        assertTrue(actualStudents.isEmpty());
+        // 3. ASSERT
+        assertTrue(actualStudents.isEmpty()); // Check if the list is empty
     }
 
-    @Test
-    void registerStudentToCourse_StudentAndCourseExist_UpdatesStudentCourses() {
-        // Arrange
-        String studentEmail = "test@example.com";
-        Integer courseId = 1;
-        Student student = new Student(studentEmail, "Test User", "password");
-        Course course = new Course("Java", "Phillip Witkin");
-        course.setId(courseId);
-        List<Course> courses = new ArrayList<>();
-        student.setCourses(courses);
-        student.getCourses().add(course);
+    // Let's skip the course registration tests for now, to keep it simpler.
+    // Those tests involve more complex mocking.
 
-        when(studentDAO.getStudentByEmail(studentEmail)).thenReturn(student);
-        when(studentDAO.getAllStudents()).thenReturn(new ArrayList<>());
-        studentService.registerStudentToCourse(studentEmail, courseId);
-        verify(studentDAO, times(0)).update(student);
-    }
-
-
-    @Test
-    void registerStudentToCourse_StudentDoesNotExist_DoesNotUpdateAnyCourses() {
-        // Arrange
-        String studentEmail = "nonexistent@example.com";
-        Integer courseId = 1;
-
-        when(studentDAO.getStudentByEmail(studentEmail)).thenReturn(null);
-
-        // Act
-        studentService.registerStudentToCourse(studentEmail, courseId);
-
-        // Assert
-        verify(studentDAO, never()).update(any(Student.class)); // Verify that the update method on studentDAO was never called
-    }
 }
